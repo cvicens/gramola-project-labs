@@ -1,0 +1,29 @@
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            - name: UPLOAD_DIR
+              valueFrom:
+                configMapKeyRef:
+                  name: files-configmap
+                  key: upload_dir
+          readinessProbe:
+            httpGet:
+              path: /api/greeting
+              port: 8080
+              scheme: HTTP
+          livenessProbe:
+            httpGet:
+              path: /api/greeting
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          volumeMounts:
+            - mountPath: /uploads
+              name: files-uploads-data
+      volumes:
+      - name: files-uploads-data
+        persistentVolumeClaim:
+          claimName: files-uploads

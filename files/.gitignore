@@ -1,0 +1,24 @@
+#System Files
+.DS_Store
+Thumbs.db
+
+#### VSCode
+.vscode/
+
+# Eclipse
+.metadata
+.settings
+.classpath
+.project
+bin
+
+# Temporary
+tmp/
+*.tmp
+*.bak
+local.properties
+
+# Other
+*.log
+*.zip
+node_modules/
