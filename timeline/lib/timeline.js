@@ -51,16 +51,9 @@ function createTimelineEntry(newEntry) {
     });
   }
 
-function getIsoDate (date) {
-  if (!date) {
-    return null;
-  }
-  return date.getFullYear() + "-" + ('0' + (date.getMonth() + 1)).slice(-2) + "-" + ('0' + date.getDate()).slice(-2);
-}
-
 function readiness() {
   console.log('readyState', mongoose.connection.readyState);
-  return mongoose && mongoose.connection && mongoose.connection.readyState != 0;
+  return mongoose && mongoose.connection && mongoose.connection.readyState !== 0;
 }
 
 function route() {
@@ -76,15 +69,15 @@ function route() {
       return;
     }
     next();
-  })
+  });
 
   // Finding an event by eventId, userId, ...
   router.get('/:eventId/:userId', function(req, res) {
     let eventId = req.params.eventId;
     let userId = req.params.userId;
     console.log('Find event by eventId', eventId, 'userId', userId);
-    if (typeof eventId === 'undefined' || eventId == '' ||
-        typeof userId === 'undefined' || userId == '') {
+    if (typeof eventId === 'undefined' || eventId === '' ||
+        typeof userId === 'undefined' || userId === '') {
       res.status(400).json([]);
     }
 
@@ -93,7 +86,7 @@ function route() {
       res.status(200).json(data);
     })
     .catch(function (err) {
-      res.status(500).json({status: ERROR, msg: err})
+      res.status(500).json({status: ERROR, msg: err});
     });
   });
 
@@ -101,7 +94,7 @@ function route() {
   router.post('/', function(req, res) {
     let entry = req.body;
     console.log('Create new entry', entry);
-    if (typeof entry === 'undefined' || entry == '') {
+    if (typeof entry === 'undefined' || entry === '') {
       res.status(400).json([]);
     }
     
@@ -110,7 +103,7 @@ function route() {
       res.status(200).json(data);
     })
     .catch(function (err) {
-      res.status(500).json({status: ERROR, msg: err})
+      res.status(500).json({status: ERROR, msg: err});
     });
   });
 

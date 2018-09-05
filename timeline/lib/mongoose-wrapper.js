@@ -80,7 +80,7 @@ function connect() {
     return new Promise((resolve, reject) => {
         mongoose.connect(`mongodb://${DB_SERVICE_NAME}:${DB_SERVICE_PORT}/${DB_NAME}`, options)
         .then((res) => {
-            if (mongoose.connection && mongoose.connection.readyState == 1) {
+            if (mongoose.connection && mongoose.connection.readyState === 1) {
                 console.log('mongoose connected to ', `mongodb://${DB_SERVICE_NAME}:${DB_SERVICE_PORT}/${DB_NAME}`);
                 resolve(mongoose.connection);
             } else {
@@ -96,14 +96,19 @@ function connect() {
 }
 
 function readiness() {
-    return mongoose && mongoose.connection && mongoose.connection.readyState == 1;
+    return mongoose && mongoose.connection && mongoose.connection.readyState === 1;
 }
 
 function getDatabaseInitTries() {
     return databaseInitTries;
 }
 
+function getDatabaseInitialized() {
+    return databaseInitialized;
+}
+
 module.exports.connect = connect;
 module.exports.readiness = readiness;
 module.exports.initDatabase = initDatabase;
 module.exports.getDatabaseInitTries = getDatabaseInitTries;
+module.exports.getDatabaseInitialized = getDatabaseInitialized;
