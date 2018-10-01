@@ -1,0 +1,356 @@
+---
+swagger: "2.0"
+info:
+  title: gramola-api
+  description: API for Gramola App
+  version: 1.0.0
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /api/events:
+    post:
+      summary: Create new event
+      operationId: eventsPost
+      parameters:
+      - name: event
+        in: body
+        schema:
+          $ref: '#/definitions/Event'
+      responses:
+        200:
+          description: Successfully created object
+          schema:
+            $ref: '#/definitions/Event'
+      x-swagger-router-controller: eventsRoute
+    get:
+      summary: Get all events
+      operationId: eventsGetAll
+      responses:
+        200:
+          description: Succesful response, list of events
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Event'
+          examples:
+            application/json: |-
+              [
+                 {
+                    "id":1,
+                    "name":"Not in the Lifetime Tour",
+                    "address":"Cmo. de Perales, 23, 28041",
+                    "city":"MADRID",
+                    "province":"MADRID",
+                    "country":"SPAIN",
+                    "date":"2018-08-05",
+                    "startTime":"18:00",
+                    "endTime":"23:00",
+                    "location":"Caja Magica",
+                    "artist":"Guns n Roses",
+                    "description":"The revived Guns N’ Roses and ...",
+                    "image":"guns-P1080795.jpg"
+                 },
+                 {
+                    "id":2,
+                    "name":"CONCRETE AND GOLD TOUR 2018",
+                    "address":"8 Boulevard de Bercy, Paris",
+                    "city":"PARIS",
+                    "province":"PARIS",
+                    "country":"FRANCE",
+                    "date":"2018-09-15",
+                    "startTime":"18:00",
+                    "endTime":"23:00",
+                    "location":"AccorHotels Arena",
+                    "artist":"Foo Fighters",
+                    "description":"Concrete and Gold Tour is...",
+                    "image":"foo-P1000628.jpg"
+                 }
+              ]
+      x-swagger-router-controller: eventsRoute
+  /api/events/{country}/{city}:
+    get:
+      summary: Get events by country and city
+      operationId: eventsGetByCountryAndCity
+      responses:
+        200:
+          description: Succesful response, list of events
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Event'
+          examples:
+            application/json: |-
+              [
+                 {
+                    "id":1,
+                    "name":"Not in the Lifetime Tour",
+                    "address":"Cmo. de Perales, 23, 28041",
+                    "city":"MADRID",
+                    "province":"MADRID",
+                    "country":"SPAIN",
+                    "date":"2018-08-05",
+                    "startTime":"18:00",
+                    "endTime":"23:00",
+                    "location":"Caja Magica",
+                    "artist":"Guns n Roses",
+                    "description":"The revived Guns N’ Roses and ...",
+                    "image":"guns-P1080795.jpg"
+                 },
+                 {
+                    "id":2,
+                    "name":"CONCRETE AND GOLD TOUR 2018",
+                    "address":"8 Boulevard de Bercy, Paris",
+                    "city":"PARIS",
+                    "province":"PARIS",
+                    "country":"FRANCE",
+                    "date":"2018-09-15",
+                    "startTime":"18:00",
+                    "endTime":"23:00",
+                    "location":"AccorHotels Arena",
+                    "artist":"Foo Fighters",
+                    "description":"Concrete and Gold Tour is...",
+                    "image":"foo-P1000628.jpg"
+                 }
+              ]
+      x-swagger-router-controller: eventsRoute
+    parameters:
+    - name: country
+      in: path
+      description: Country the event takes place at
+      required: true
+      type: string
+    - name: city
+      in: path
+      description: City the event takes place at
+      required: true
+      type: string
+  /api/files/upload:
+    post:
+      summary: Receives metada and a file as form-data
+      operationId: filesPost
+      consumes:
+      - multipart/form-data
+      parameters:
+      - name: naming_strategy
+        in: formData
+        description: It can be either original or random (default)
+        type: string
+      - name: file
+        in: formData
+        required: true
+        type: file
+      responses:
+        200:
+          description: Successful upload
+          schema:
+            $ref: '#/definitions/FileResponse'
+        default:
+          description: Invalid request.
+          schema:
+            $ref: '#/definitions/Error'
+      x-swagger-router-controller: filesRoute
+  /api/files/{fileId}:
+    get:
+      summary: Get file by ID
+      operationId: filesGet
+      responses:
+        200:
+          description: Returns a file
+          schema:
+            format: binary
+            type: string
+        404:
+          description: File not found
+      x-swagger-router-controller: filesRoute
+    parameters:
+    - name: fileId
+      in: path
+      description: File ID
+      required: true
+      type: string
+  /api/timeline:
+    post:
+      summary: Create new timeline entry
+      operationId: timelinePost
+      parameters:
+      - name: timelineEntry
+        in: body
+        schema:
+          $ref: '#/definitions/TimelineEntry'
+      responses:
+        200:
+          description: Timeline entry successfully created
+          schema:
+            $ref: '#/definitions/TimelineEntry'
+      x-swagger-router-controller: timelineRoute
+  /api/timeline/{eventId}/{userId}:
+    get:
+      summary: Get timeline entry by Event ID and User ID
+      operationId: timelineGetByEventIdAndUserId
+      responses:
+        200:
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TimelineEntry'
+          examples:
+            application/json: |-
+              [
+                 {
+                    "_id":"5b8e4542545687035ce10b84",
+                    "id":"1",
+                    "eventId":"1",
+                    "userId":"trever",
+                    "title":"Waiting at the entrance!",
+                    "date":"2018-04-27",
+                    "time":"18:00",
+                    "body":"Lorem ipsum...",
+                    "image":"images/guns-P1080795.png",
+                    "__v":0
+                 },
+                 {
+                    "_id":"5b8e4542545687035ce10b85",
+                    "id":"2",
+                    "eventId":"1",
+                    "userId":"trever",
+                    "title":"Checking in!",
+                    "date":"2018-04-27",
+                    "time":"18:32",
+                    "body":"Lorem ipsum...",
+                    "image":"images/guns-P1080795.png",
+                    "__v":0
+                 }
+              ]
+      x-swagger-router-controller: timelineRoute
+    parameters:
+    - name: eventId
+      in: path
+      description: Event ID
+      required: true
+      type: string
+    - name: userId
+      in: path
+      description: User ID
+      required: true
+      type: string
+definitions:
+  FileResponse:
+    title: Root Type for FileResponse
+    description: The root of the FileResponse type's schema.
+    type: object
+    properties:
+      result:
+        description: Success or Error
+        type: string
+      filename:
+        description: Name of the file uploaded (this is the fileId for later use)
+        type: string
+    example: |-
+      {
+          "result": "success",
+          "filename": "foo-P1000628.jpg"
+      }
+  Error:
+    title: Root Type for Error
+    description: The root of the Error type's schema.
+    type: object
+    properties:
+      message:
+        type: string
+      code:
+        type: string
+    example: |-
+      {
+          "message" : "File size error",
+          "code" : "FILE_SIZE_ERROR"
+      }
+  Event:
+    title: Root Type for Event
+    description: The root of the Event type's schema.
+    type: object
+    required:
+      - id
+      - name
+      - date
+      - artist
+    properties:
+      id:
+        format: int32
+        type: integer
+      name:
+        type: string
+      address:
+        type: string
+      city:
+        type: string
+      province:
+        type: string
+      country:
+        type: string
+      date:
+        format: date
+        type: string
+      startTime:
+        type: string
+      endTime:
+        type: string
+      location:
+        type: string
+      artist:
+        type: string
+      description:
+        type: string
+      image:
+        type: string
+    example: |-
+      {
+          "id": 1,
+          "name": "Not in the Lifetime Tour",
+          "address": "Cmo. de Perales, 23, 28041",
+          "city": "MADRID",
+          "province": "MADRID",
+          "country": "SPAIN",
+          "date": "2018-08-05",
+          "startTime": "18:00",
+          "endTime": "23:00",
+          "location": "Caja Magica",
+          "artist": "Guns n Roses",
+          "description": "The revived Guns N’ Roses and ...",
+          "image": "guns-P1080795.jpg"
+      }
+  TimelineEntry:
+    title: Root Type for TimelineEntry
+    description: The root of the TimelineEntry type's schema.
+    type: object
+    properties:
+      id:
+        type: string
+      eventId:
+        type: string
+      userId:
+        type: string
+      title:
+        type: string
+      date:
+        format: date
+        type: string
+      time:
+        type: string
+      body:
+        type: string
+      image:
+        type: string
+    example: |-
+      {
+          "id": 1,
+          "eventId": 1,
+          "userId": "trever",
+          "title": "Waiting at the entrance!",
+          "date": "2018-04-27",
+          "time": "18:00",
+          "body": "Lorem ipsum...",
+          "image": "images/guns-P1080795.png"
+      }

@@ -1,0 +1,112 @@
+swagger: '2.0'
+info:
+  title: Simple Hello World API
+  description: API for Hello World Service.
+  version: '1.0'
+produces:
+  - application/json
+consumes:
+  - application/json
+  - application/octet-stream
+host: 'localhost:8001'
+basePath: /api
+paths:
+  /hola:
+    post:
+      x-swagger-router-controller: holaMundoRoute
+      operationId: holaMundoPost
+      tags:
+        - /hola
+      description: Returns Hola mundo string via POST.
+      parameters:
+        - name: greeting
+          in: body
+          description: Name of greeting
+          required: true
+          schema:
+            $ref: '#/definitions/Greeting'
+      responses:
+        '200':
+          description: Successful request.
+          schema:
+            $ref: '#/definitions/Hello'
+        default:
+          description: Invalid request.
+          schema:
+            $ref: '#/definitions/Error'
+  /hello:
+    post:
+      x-swagger-router-controller: helloWorldRoute
+      operationId: helloWorldPost
+      tags:
+        - /hello
+      description: Returns Hello world string via POST.
+      parameters:
+        - name: greeting
+          in: body
+          description: Name of greeting
+          required: true
+          schema:
+            $ref: '#/definitions/Greeting'
+      responses:
+        '200':
+          description: Successful request.
+          schema:
+            $ref: '#/definitions/Hello'
+        default:
+          description: Invalid request.
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      x-swagger-router-controller: helloWorldRoute
+      operationId: helloWorldGet
+      tags:
+        - /hello
+      description: Returns Hello world string via GET.
+      parameters:
+        - name: name
+          in: query
+          description: Name
+          required: true
+          type: string
+        - name: surname
+          in: query
+          description: Surname
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful request.
+          schema:
+            $ref: '#/definitions/Hello'
+        default:
+          description: Invalid request.
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Hello:
+    properties:
+      msg:
+        type: string
+    required:
+      - msg
+  Greeting:
+    properties:
+      name:
+        type: string
+      surname:
+        type: string
+    required:
+      - name
+      - surname
+  Error:
+    type: object
+    required:
+      - message
+    properties:
+      message:
+        type: string
+      extra:
+        type: object
+      code:
+        type: string
