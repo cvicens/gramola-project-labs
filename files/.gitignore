@@ -10,7 +10,6 @@ Thumbs.db
 .settings
 .classpath
 .project
-bin
 
 # Temporary
 tmp/
