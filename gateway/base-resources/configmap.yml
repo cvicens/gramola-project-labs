@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+     name: gateway-configmap
+data:
+  files_service_name: "files"
+  events_service_name: "events"
+  timeline_service_name: "timeline"

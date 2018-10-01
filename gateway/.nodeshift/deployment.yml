@@ -1,0 +1,32 @@
+spec:
+  template:
+    spec:
+      containers:
+        - env:
+            - name: FILES_SERVICE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: gateway-configmap
+                  key: files_service_name
+            - name: EVENTS_SERVICE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: gateway-configmap
+                  key: events_service_name
+            - name: TIMELINE_SERVICE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: gateway-configmap
+                  key: timeline_service_name
+          readinessProbe:
+            httpGet:
+              path: /api/greeting
+              port: 8080
+              scheme: HTTP
+          livenessProbe:
+            httpGet:
+              path: /api/greeting
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 30

@@ -6,17 +6,21 @@ var express = require("express");
 var path_1 = require("path");
 var swagger_1 = require("./middlewares/swagger");
 var env = require("./env");
-var log_1 = require("./log");
+// import { inOutLogger } from "./log";
 var monit = require("./monitoring");
-var cls = require("./lib/cls");
+// import * as cls from "./lib/cls";
 var cors_1 = require("./cors");
 env.checkEnv();
 var app = express();
 exports.default = app;
 monit.init(app);
 app.use(cors(cors_1.getCorsOptions()));
-app.use(cls.setRequestId);
-app.use(log_1.inOutLogger);
+// app.use(cls.setRequestId);
+// app.use(inOutLogger);
+app.use("/api/greeting", function (request, response) {
+    var name = request.query ? request.query.name : undefined;
+    response.send({ content: "Hello, " + (name || "World!") });
+});
 swagger_1.initSwaggerMiddlware(app, path_1.resolve(__dirname), function () {
     // Custom error handler that returns JSON
     app.use(function (err, req, res, next) {

@@ -20,10 +20,10 @@ export function set(key, val) {
 }
 
 export function checkEnv() {
-  const log = require("./log").default;
+  // const log = require("./log").default;
   for (const key in def) {
     if (process.env[key] === undefined) {
-      log.warn(`Env var ${key} is not set. Default will be used: ${def[key]}`);
+      console.warn(`Env var ${key} is not set. Default will be used: ${def[key]}`);
     }
   }
 }

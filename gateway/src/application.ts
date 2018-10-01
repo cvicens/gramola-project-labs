@@ -5,9 +5,9 @@ import * as express from "express";
 import { resolve } from "path";
 import { initSwaggerMiddlware } from "./middlewares/swagger";
 import * as env from "./env";
-import { inOutLogger } from "./log";
+// import { inOutLogger } from "./log";
 import * as monit from "./monitoring";
-import * as cls from "./lib/cls";
+// import * as cls from "./lib/cls";
 import { getCorsOptions } from "./cors";
 
 env.checkEnv();
@@ -15,8 +15,13 @@ const app = express();
 export default app;
 monit.init(app);
 app.use(cors(getCorsOptions()));
-app.use(cls.setRequestId);
-app.use(inOutLogger);
+// app.use(cls.setRequestId);
+// app.use(inOutLogger);
+
+app.use("/api/greeting", (request, response) => {
+  const name = request.query ? request.query.name : undefined;
+  response.send({content: `Hello, ${name || "World!"}`});
+});
 
 initSwaggerMiddlware(app, resolve(__dirname), () => {
   // Custom error handler that returns JSON
