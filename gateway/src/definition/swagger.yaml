@@ -334,7 +334,6 @@ definitions:
       title:
         type: string
       date:
-        format: date
         type: string
       time:
         type: string

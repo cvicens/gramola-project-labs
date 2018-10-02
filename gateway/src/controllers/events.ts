@@ -26,10 +26,10 @@ export async function eventsGetByCountryAndCityHandler(req: Request, res: Respon
         let path = null;
         const carrier = [];
         if (country && city) {
-            path = "/api/events/" + country + "/" + city;
+            path = "api/events/" + country + "/" + city;
             result = await invokeService(carrier, EVENTS_SERVICE_NAME, EVENTS_SERVICE_PORT, path, "GET", null);
         } else {
-            path = "/api/events";
+            path = "api/events";
             result = await invokeService(carrier, EVENTS_SERVICE_NAME, EVENTS_SERVICE_PORT, path, "GET", null);
         }
         console.log("result", result);

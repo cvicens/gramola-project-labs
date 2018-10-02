@@ -38,29 +38,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var P = require("bluebird");
 var request = require("request-promise");
 function invokeService(carrier, service, port, path, method, data, binary) {
+    if (data === void 0) { data = null; }
     if (binary === void 0) { binary = false; }
     return __awaiter(this, void 0, P, function () {
         var serviceURI, options;
         return __generator(this, function (_a) {
             console.log("service:", service, "path:", path, "port", port, "method:", method, "data:", JSON.stringify(data));
             serviceURI = "http://" + service + ":" + port + "/" + path;
-            if (typeof service !== "undefined" && typeof method !== "undefined" && typeof data !== "undefined") {
+            if (service && typeof method) {
                 options = {
                     method: method,
                     uri: serviceURI,
-                    headers: carrier,
-                    json: true,
-                    encoding: "utf8",
-                    qs: null,
-                    body: null,
-                    resolveWithFullResponse: false
+                    // headers: carrier,
+                    json: true
                 };
                 if (binary) {
                     options.json = false;
                     options.encoding = null;
                     options.resolveWithFullResponse = true;
                 }
-                if (method === "GET") {
+                if (method === "GET" && data) {
                     options.qs = data;
                 }
                 else if (method === "POST") {

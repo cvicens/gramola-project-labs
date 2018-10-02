@@ -1,4 +1,5 @@
-export SERVICE_URL=http://timeline-gramola-dev.apps.istio.openshiftworkshop.com
+#export SERVICE_URL=http://timeline-gramola-dev.apps.istio.openshiftworkshop.com
+export SERVICE_URL=http://localhost:9090
 curl --header "Content-Type: application/json" \
   --request POST \
   --data '{

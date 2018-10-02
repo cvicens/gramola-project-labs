@@ -61,13 +61,13 @@ function eventsGetByCountryAndCityHandler(req, res) {
                     path = null;
                     carrier = [];
                     if (!(country && city)) return [3 /*break*/, 3];
-                    path = "/api/events/" + country + "/" + city;
+                    path = "api/events/" + country + "/" + city;
                     return [4 /*yield*/, rest_1.invokeService(carrier, EVENTS_SERVICE_NAME, EVENTS_SERVICE_PORT, path, "GET", null)];
                 case 2:
                     result = _a.sent();
                     return [3 /*break*/, 5];
                 case 3:
-                    path = "/api/events";
+                    path = "api/events";
                     return [4 /*yield*/, rest_1.invokeService(carrier, EVENTS_SERVICE_NAME, EVENTS_SERVICE_PORT, path, "GET", null)];
                 case 4:
                     result = _a.sent();
