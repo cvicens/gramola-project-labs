@@ -272,7 +272,6 @@ definitions:
     description: The root of the Event type's schema.
     type: object
     required:
-      - id
       - name
       - date
       - artist

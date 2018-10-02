@@ -15,6 +15,9 @@
     "js-yaml": "3.10.0",
     "perfy": "^1.1.2",
     "prom-client": "^11.0.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2",
+    "request-promise-core": "^1.1.1",
     "swagger-tools": "^0.10.4",
     "winston": "^2.4.0"
   },

@@ -37,39 +37,113 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var P = require("bluebird");
 var eventListMock = require("./mocks/event-list-mock.json");
+var rest_1 = require("../lib/rest");
+var EVENTS_SERVICE_NAME = process.env.EVENTS_SERVICE_NAME;
+var EVENTS_SERVICE_PORT = process.env.EVENTS_SERVICE_PORT || "8080";
 function eventsGetByCountryAndCityHandler(req, res) {
     return __awaiter(this, void 0, P, function () {
-        var country, city;
+        var country, city, result, path, carrier, error_1;
         return __generator(this, function (_a) {
-            country = req.swagger.params.country.value;
-            city = req.swagger.params.city.value;
-            console.log("eventsGetByCountryAndCityHandler", country, city);
-            console.log("eventListMock", eventListMock);
-            res.send(eventListMock);
-            return [2 /*return*/];
+            switch (_a.label) {
+                case 0:
+                    country = req.swagger.params.country.value;
+                    city = req.swagger.params.city.value;
+                    console.log("eventsGetByCountryAndCityHandler", country, city);
+                    console.log("EVENTS_SERVICE_NAME", EVENTS_SERVICE_NAME);
+                    if (!EVENTS_SERVICE_NAME) {
+                        console.log("eventListMock", eventListMock);
+                        return [2 /*return*/, res.send(eventListMock)];
+                    }
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 6, , 7]);
+                    result = null;
+                    path = null;
+                    carrier = [];
+                    if (!(country && city)) return [3 /*break*/, 3];
+                    path = "/api/events/" + country + "/" + city;
+                    return [4 /*yield*/, rest_1.invokeService(carrier, EVENTS_SERVICE_NAME, EVENTS_SERVICE_PORT, path, "GET", null)];
+                case 2:
+                    result = _a.sent();
+                    return [3 /*break*/, 5];
+                case 3:
+                    path = "/api/events";
+                    return [4 /*yield*/, rest_1.invokeService(carrier, EVENTS_SERVICE_NAME, EVENTS_SERVICE_PORT, path, "GET", null)];
+                case 4:
+                    result = _a.sent();
+                    _a.label = 5;
+                case 5:
+                    console.log("result", result);
+                    return [2 /*return*/, res.send(result)];
+                case 6:
+                    error_1 = _a.sent();
+                    console.error("ERROR", error_1);
+                    return [2 /*return*/, res.send(error_1)];
+                case 7: return [2 /*return*/];
+            }
         });
     });
 }
 exports.eventsGetByCountryAndCityHandler = eventsGetByCountryAndCityHandler;
 function eventsGetAllHandler(req, res) {
     return __awaiter(this, void 0, P, function () {
+        var carrier, path, result, error_2;
         return __generator(this, function (_a) {
-            console.log("eventsGetAllHandler");
-            console.log("eventListMock", eventListMock);
-            res.send(eventListMock);
-            return [2 /*return*/];
+            switch (_a.label) {
+                case 0:
+                    console.log("eventsGetAllHandler");
+                    console.log("eventListMock", eventListMock);
+                    if (!EVENTS_SERVICE_NAME) {
+                        console.log("eventListMock", eventListMock);
+                        return [2 /*return*/, res.send(eventListMock)];
+                    }
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    carrier = [];
+                    path = "api/events";
+                    return [4 /*yield*/, rest_1.invokeService(carrier, EVENTS_SERVICE_NAME, EVENTS_SERVICE_PORT, path, "GET", null)];
+                case 2:
+                    result = _a.sent();
+                    console.log("result", result);
+                    return [2 /*return*/, res.send(result)];
+                case 3:
+                    error_2 = _a.sent();
+                    console.error("ERROR", error_2);
+                    return [2 /*return*/, res.send(error_2)];
+                case 4: return [2 /*return*/];
+            }
         });
     });
 }
 exports.eventsGetAllHandler = eventsGetAllHandler;
 function eventsPostHandler(req, res) {
     return __awaiter(this, void 0, P, function () {
-        var event;
+        var event, carrier, path, result, error_3;
         return __generator(this, function (_a) {
-            event = req.swagger.params.event.value;
-            console.log("eventsPostHandler", event);
-            res.send(event);
-            return [2 /*return*/];
+            switch (_a.label) {
+                case 0:
+                    event = req.swagger.params.event.value;
+                    console.log("eventsPostHandler", event);
+                    if (!EVENTS_SERVICE_NAME) {
+                        return [2 /*return*/, res.send(event)];
+                    }
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    carrier = [];
+                    path = "api/events";
+                    return [4 /*yield*/, rest_1.invokeService(carrier, EVENTS_SERVICE_NAME, EVENTS_SERVICE_PORT, path, "POST", event)];
+                case 2:
+                    result = _a.sent();
+                    console.log("result", result);
+                    return [2 /*return*/, res.send(result)];
+                case 3:
+                    error_3 = _a.sent();
+                    console.error("ERROR", error_3);
+                    return [2 /*return*/, res.send(error_3)];
+                case 4: return [2 /*return*/];
+            }
         });
     });
 }
