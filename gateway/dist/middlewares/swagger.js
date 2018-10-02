@@ -15,7 +15,6 @@ exports.initSwaggerMiddlware = function (app, basePath, cb) {
         useStubs: false,
         validateResponse: true
     };
-    console.log(">>>swaggerDoc", swaggerDoc);
     swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
         // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
         app.use(middleware.swaggerMetadata());
