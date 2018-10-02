@@ -37,28 +37,83 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var P = require("bluebird");
 var timelineListMock = require("./mocks/timeline-list-mock.json");
+var rest_1 = require("../lib/rest");
+var TIMELINE_SERVICE_NAME = process.env.TIMELINE_SERVICE_NAME;
+var TIMELINE_SERVICE_PORT = process.env.TIMELINE_SERVICE_PORT || "8080";
 function timelineGetByEventIdAndUserIdHandler(req, res) {
     return __awaiter(this, void 0, P, function () {
-        var eventId, userId;
+        var eventId, userId, result, path, carrier, error_1;
         return __generator(this, function (_a) {
-            eventId = req.swagger.params.eventId.value;
-            userId = req.swagger.params.userId.value;
-            console.log("timelineGetByEventIdAndUserIdHandler", eventId, userId);
-            console.log("timelineListMock", timelineListMock);
-            res.send(timelineListMock);
-            return [2 /*return*/];
+            switch (_a.label) {
+                case 0:
+                    eventId = req.swagger.params.eventId.value;
+                    userId = req.swagger.params.userId.value;
+                    console.log("timelineGetByEventIdAndUserIdHandler", eventId, userId);
+                    console.log("TIMELINE_SERVICE_NAME", TIMELINE_SERVICE_NAME);
+                    if (!TIMELINE_SERVICE_NAME) {
+                        console.log("timelineListMock", timelineListMock);
+                        return [2 /*return*/, res.send(timelineListMock)];
+                    }
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 6, , 7]);
+                    result = null;
+                    path = null;
+                    carrier = [];
+                    if (!(eventId && userId)) return [3 /*break*/, 3];
+                    path = "api/timeline/" + eventId + "/" + userId;
+                    return [4 /*yield*/, rest_1.invokeService(carrier, TIMELINE_SERVICE_NAME, TIMELINE_SERVICE_PORT, path, "GET", null)];
+                case 2:
+                    result = _a.sent();
+                    return [3 /*break*/, 5];
+                case 3:
+                    path = "api/timeline";
+                    return [4 /*yield*/, rest_1.invokeService(carrier, TIMELINE_SERVICE_NAME, TIMELINE_SERVICE_PORT, path, "GET", null)];
+                case 4:
+                    result = _a.sent();
+                    _a.label = 5;
+                case 5:
+                    console.log("result", result);
+                    return [2 /*return*/, res.send(result)];
+                case 6:
+                    error_1 = _a.sent();
+                    console.error("ERROR", error_1);
+                    return [2 /*return*/, res.send(error_1)];
+                case 7: return [2 /*return*/];
+            }
         });
     });
 }
 exports.timelineGetByEventIdAndUserIdHandler = timelineGetByEventIdAndUserIdHandler;
 function timelinePostHandler(req, res) {
     return __awaiter(this, void 0, P, function () {
-        var timelineEntry;
+        var timelineEntry, carrier, path, result, error_2;
         return __generator(this, function (_a) {
-            timelineEntry = req.swagger.params.timelineEntry.value;
-            console.log("timelinePostHandler", timelineEntry);
-            res.send(timelineEntry);
-            return [2 /*return*/];
+            switch (_a.label) {
+                case 0:
+                    timelineEntry = req.swagger.params.timelineEntry.value;
+                    console.log("timelinePostHandler", timelineEntry);
+                    res.send(timelineEntry);
+                    console.log("TIMELINE_SERVICE_NAME", TIMELINE_SERVICE_NAME);
+                    if (!TIMELINE_SERVICE_NAME) {
+                        return [2 /*return*/, res.send(event)];
+                    }
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    carrier = [];
+                    path = "api/timeline";
+                    return [4 /*yield*/, rest_1.invokeService(carrier, TIMELINE_SERVICE_NAME, TIMELINE_SERVICE_PORT, path, "POST", timelineEntry)];
+                case 2:
+                    result = _a.sent();
+                    console.log("result", result);
+                    return [2 /*return*/, res.send(result)];
+                case 3:
+                    error_2 = _a.sent();
+                    console.error("ERROR", error_2);
+                    return [2 /*return*/, res.send(error_2)];
+                case 4: return [2 /*return*/];
+            }
         });
     });
 }

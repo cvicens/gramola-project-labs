@@ -37,7 +37,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var P = require("bluebird");
 var request = require("request-promise");
-function invokeService(carrier, service, port, path, method, data) {
+function invokeService(carrier, service, port, path, method, data, binary) {
+    if (binary === void 0) { binary = false; }
     return __awaiter(this, void 0, P, function () {
         var serviceURI, options;
         return __generator(this, function (_a) {
@@ -47,11 +48,18 @@ function invokeService(carrier, service, port, path, method, data) {
                 options = {
                     method: method,
                     uri: serviceURI,
-                    json: true,
                     headers: carrier,
+                    json: true,
+                    encoding: "utf8",
                     qs: null,
-                    body: null
+                    body: null,
+                    resolveWithFullResponse: false
                 };
+                if (binary) {
+                    options.json = false;
+                    options.encoding = null;
+                    options.resolveWithFullResponse = true;
+                }
                 if (method === "GET") {
                     options.qs = data;
                 }

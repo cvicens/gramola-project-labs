@@ -36,32 +36,78 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var P = require("bluebird");
+var rest_1 = require("../lib/rest");
+var FILES_SERVICE_NAME = process.env.FILES_SERVICE_NAME;
+var FILES_SERVICE_PORT = process.env.FILES_SERVICE_PORT || "8080";
 var UPLOAD_DIR = process.env.UPLOAD_DIR || __dirname + "/../samples/";
 function filesGetHandler(req, res) {
     return __awaiter(this, void 0, P, function () {
-        var fileId;
+        var fileId, carrier, path;
         return __generator(this, function (_a) {
             fileId = req.swagger.params.fileId.value;
             console.log("filesGetHandler", fileId);
-            res.sendFile(fileId, { root: UPLOAD_DIR });
+            if (!FILES_SERVICE_NAME) {
+                return [2 /*return*/, res.sendFile(fileId, { root: UPLOAD_DIR })];
+            }
+            carrier = [];
+            path = "api/files/" + fileId;
+            rest_1.invokeService(carrier, FILES_SERVICE_NAME, FILES_SERVICE_PORT, path, "GET", null, true)
+                .then(function (result) {
+                console.log("result", result);
+                console.log("content-type", result.headers["content-type"]);
+                /*res.writeHead(200, {
+                    "Content-Type": result.headers["content-type"],
+                    "Content-disposition": "attachment;filename=" + fileId,
+                    "Content-Length": result.data.length
+                });
+                return res.end(new Buffer(result.data, "binary"));*/
+                // res.contentType(result.headers["content-type"]);
+                // return res.end(result.data, "binary");
+                res.set("Content-Type", result.headers["content-type"]);
+                return res.send(result.body);
+            })
+                .catch(function (error) {
+                console.error("ERROR", error);
+                return res.send(error);
+            });
             return [2 /*return*/];
         });
     });
 }
 exports.filesGetHandler = filesGetHandler;
+// TODO invokeService cannot handle formData multipart... so far....
 function filesPostHandler(req, res) {
     return __awaiter(this, void 0, P, function () {
-        var result;
+        var result, carrier, path, result, error_1;
         return __generator(this, function (_a) {
-            console.log("naming_strategy", req.swagger.params.naming_strategy.value);
-            console.log("file.encoding", req.swagger.params.file.value.encoding);
-            console.log("file.fieldname", req.swagger.params.file.value.fieldname);
-            console.log("file.mimetype", req.swagger.params.file.value.mimetype);
-            console.log("file.originalname", req.swagger.params.file.value.originalname);
-            console.log("file.size", req.swagger.params.file.value.size);
-            result = { result: "success", filename: req.swagger.params.file.value.originalname };
-            res.send(result);
-            return [2 /*return*/];
+            switch (_a.label) {
+                case 0:
+                    console.log("naming_strategy", req.swagger.params.naming_strategy.value);
+                    console.log("file.encoding", req.swagger.params.file.value.encoding);
+                    console.log("file.fieldname", req.swagger.params.file.value.fieldname);
+                    console.log("file.mimetype", req.swagger.params.file.value.mimetype);
+                    console.log("file.originalname", req.swagger.params.file.value.originalname);
+                    console.log("file.size", req.swagger.params.file.value.size);
+                    if (!FILES_SERVICE_NAME) {
+                        result = { result: "success", filename: req.swagger.params.file.value.originalname };
+                        return [2 /*return*/, res.send(result)];
+                    }
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    carrier = [];
+                    path = "api/files";
+                    return [4 /*yield*/, rest_1.invokeService(carrier, FILES_SERVICE_NAME, FILES_SERVICE_PORT, path, "POST", null)];
+                case 2:
+                    result = _a.sent();
+                    console.log("result", result);
+                    return [2 /*return*/, res.send(result)];
+                case 3:
+                    error_1 = _a.sent();
+                    console.error("ERROR", error_1);
+                    return [2 /*return*/, res.send(error_1)];
+                case 4: return [2 /*return*/];
+            }
         });
     });
 }
